@@ -1,0 +1,30 @@
+{
+  "name": "alluvial-editor",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node esbuild.mjs"
+  },
+  "author": "asuki",
+  "description": "",
+  "dependencies": {
+    "@codemirror/language": "^6.11.3",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.38.8",
+    "@milkdown/ctx": "^7.17.1",
+    "@milkdown/kit": "^7.17.1",
+    "@milkdown/preset-commonmark": "^7.17.1",
+    "@milkdown/prose": "^7.17.1",
+    "@milkdown/theme-nord": "^7.17.1",
+    "@milkdown/utils": "^7.17.1",
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.3",
+    "esbuild": "^0.27.0",
+    "esbuild-sass-plugin": "^3.3.1",
+    "github-markdown-css": "^5.8.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router": "^7.9.6",
+    "sass-embedded": "^1.93.3",
+    "typescript": "^5.9.3"
+  }
+}
