@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 
-import {
-  defaultValueCtx,
-  Editor,
-  rootCtx,
-} from "@milkdown/kit/core";
+import { defaultValueCtx, Editor, rootCtx } from "@milkdown/kit/core";
 import { history } from "@milkdown/kit/plugin/history";
 import { commonmark } from "@milkdown/kit/preset/commonmark";
 import { nord } from "@milkdown/theme-nord";
@@ -40,11 +36,18 @@ class MilkDownEditor extends Component<{}, DocState> {
     this.openFile = this.openFile.bind(this);
   }
 
-  _updateEditorContent(newContent: string) {
-    this._editor?.config((ctx) => {
-      ctx.set(defaultValueCtx, newContent);
-    });
-    this._editor?.create();
+  _updateEditorContent(newContent: string | null) {
+    if (newContent) {
+      this._editor.config((ctx) => {
+        ctx.set(defaultValueCtx, newContent);
+      });
+      this._editor.create();
+    }
+  }
+
+  _fileAutoSave() {
+    const content = this._editor.action(getMarkdown());
+    localStorage.setItem("docContent", content);
   }
 
   async openFile() {
@@ -102,7 +105,10 @@ class MilkDownEditor extends Component<{}, DocState> {
   }
 
   componentDidMount() {
+    this._updateEditorContent(localStorage.getItem("docContent"));
+    /** NOTE: create is an async function. if set content after create. will failed. */
     this._editor.create();
+    setInterval(() => this._fileAutoSave(), 1000);
   }
 
   render() {
