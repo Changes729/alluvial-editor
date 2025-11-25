@@ -45,6 +45,7 @@ let ctx = await esbuild.context({
     sassPlugin({
       filter: /\.module\.scss$/,
       transform: postcssModules({
+        generateScopedName: "[local]"
         // plugins: [autoprefixer],
       }),
     }),

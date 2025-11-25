@@ -12,7 +12,7 @@ import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
 import { gfm } from "@milkdown/kit/preset/gfm";
 
-import "./milkdown.scss";
+import style from "./milkdown.module.scss";
 
 import { listItemBlockComponent } from "./list-item-block";
 
@@ -78,7 +78,9 @@ class MilkDownEditor extends Component<
   }
 
   render() {
-    return <div id="readme" className={"container markdown-body"}></div>;
+    return (
+      <div id="readme" className={`${style.container} markdown-body`}></div>
+    );
   }
 }
 
