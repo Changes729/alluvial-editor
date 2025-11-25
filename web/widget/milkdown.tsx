@@ -47,6 +47,12 @@ class MilkDownEditor extends Component<
 
     this.UpdateEditorContent = this.UpdateEditorContent.bind(this);
     this.Content = this.Content.bind(this);
+
+    document.onclick = (e) => {
+      if (this.state.editable && e.target instanceof HTMLAnchorElement) {
+        window.location.href = e.target.href;
+      }
+    };
   }
 
   UpdateEditorContent(newContent: string | null) {
