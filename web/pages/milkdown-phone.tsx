@@ -12,7 +12,6 @@ import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
 // import "@milkdown/theme-nord/style.css";
 import { gfm } from "@milkdown/kit/preset/gfm";
-import "./milkdown.scss";
 
 import { listItemBlockComponent } from "../widget/list-item-block";
 

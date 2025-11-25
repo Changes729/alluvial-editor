@@ -23,20 +23,20 @@
       :focus {
         outline: none;
       }
-    }
-  }
 
-  /** prosemirror checkbox */
-  li {
-    position: relative;
-    input[type="checkbox"] {
-      position: absolute;
+      /** prosemirror checkbox */
+      li {
+        position: relative;
+        input[type="checkbox"] {
+          position: absolute;
 
-      margin: 0 0.2em 0.25em -1.4em;
-      vertical-align: middle;
+          margin: 0 0.2em 0.25em -1.4em;
+          vertical-align: middle;
 
-      left: 0;
-      top: 7px;
+          left: 0;
+          top: 7px;
+        }
+      }
     }
   }
 }
@@ -52,6 +52,19 @@
 
     .milkdown {
       font-size: 32px;
+
+      li {
+        position: relative;
+        input[type="checkbox"] {
+          position: absolute;
+
+          margin: 0.5rem 0 0 -2rem;
+          vertical-align: middle;
+
+          height: 26px;
+          width: 26px;
+        }
+      }
     }
 
     .head {
@@ -85,19 +98,6 @@
         padding: 10px 20px;
         height: fit-content;
       }
-    }
-  }
-
-  li {
-    position: relative;
-    input[type="checkbox"] {
-      position: absolute;
-
-      margin: 0.5rem 0 0 -2rem;
-      vertical-align: middle;
-
-      height: 26px;
-      width: 26px;
     }
   }
 }
