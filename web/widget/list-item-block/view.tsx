@@ -4,7 +4,7 @@ import type { NodeViewConstructor } from "@milkdown/prose/view";
 import { listItemSchema } from "@milkdown/preset-commonmark";
 import { $view } from "@milkdown/utils";
 
-import { withMeta } from "./meta";
+import { withMeta } from "../../utils/meta";
 
 export const listItemBlockView = $view(
   listItemSchema.node,
