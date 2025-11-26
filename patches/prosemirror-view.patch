@@ -1,0 +1,96 @@
+diff --git a/dist/index.js b/dist/index.js
+index 08aa138d630f9e40e6f314ab54f35a0f81fd3e3a..b5f1216b7f31bfcdeb11c0f0b78e7c4a815bf62d 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -736,7 +736,7 @@ const NOT_DIRTY = 0, CHILD_DIRTY = 1, CONTENT_DIRTY = 2, NODE_DIRTY = 3;
+ // Superclass for the various kinds of descriptions. Defines their
+ // basic structure and shared methods.
+ class ViewDesc {
+-    constructor(parent, children, dom, 
++    constructor(parent, children, dom,
+     // This is the node that holds the child views. It may be null for
+     // descs that don't have children.
+     contentDOM) {
+@@ -1971,7 +1971,6 @@ class ViewTreeUpdater {
+             // Avoid bugs in Safari's cursor drawing (#1165) and Chrome's mouse selection (#1152)
+             if ((safari || chrome) && lastChild && lastChild.dom.contentEditable == "false")
+                 this.addHackNode("IMG", parent);
+-            this.addHackNode("BR", this.top);
+         }
+     }
+     addHackNode(nodeName, parent) {
+@@ -3932,12 +3931,12 @@ class Decoration {
+     /**
+     The start position of the decoration.
+     */
+-    from, 
++    from,
+     /**
+     The end position. Will be the same as `from` for [widget
+     decorations](https://prosemirror.net/docs/ref/#view.Decoration^widget).
+     */
+-    to, 
++    to,
+     /**
+     @internal
+     */
+@@ -5622,7 +5621,7 @@ class EditorView {
+     possible to the content before the position. When positive,
+     prefer positions close to the content after the position. When
+     zero, prefer as shallow a position as possible.
+-    
++
+     Note that you should **not** mutate the editor's internal DOM,
+     only inspect it (and even that is usually not necessary).
+     */
+@@ -5633,7 +5632,7 @@ class EditorView {
+     Find the DOM node that represents the document node after the
+     given position. May return `null` when the position doesn't point
+     in front of a node or if the node is inside an opaque node view.
+-    
++
+     This is intended to be able to call things like
+     `getBoundingClientRect` on that DOM node. Do **not** mutate the
+     editor DOM directly, or add styling this way, since that will be
+@@ -5649,7 +5648,7 @@ class EditorView {
+     document structure directly, rather than poking around in the
+     DOM, but sometimes—for example when interpreting an event
+     target—you don't have a choice.)
+-    
++
+     The `bias` parameter can be used to influence which side of a DOM
+     node to use when the position is inside a leaf node.
+     */
+diff --git a/src/viewdesc.ts b/src/viewdesc.ts
+index c29bfdd31fb5c562d5bf76d2be228b07c9335313..58df0b66d778d1e546673227c1c0d1450910c770 100644
+--- a/src/viewdesc.ts
++++ b/src/viewdesc.ts
+@@ -7,9 +7,9 @@ import {Decoration, DecorationSource, WidgetConstructor, WidgetType, NodeType} f
+ import {EditorView} from "./index"
+ 
+ declare global {
+-  interface Node { 
++  interface Node {
+     /// @internal
+-    pmViewDesc?: ViewDesc 
++    pmViewDesc?: ViewDesc
+   }
+ }
+ 
+@@ -110,7 +110,7 @@ export interface MarkView {
+   /// the range around the mutation, true if it can safely be ignored.
+   ignoreMutation?: (mutation: ViewMutationRecord) => boolean
+ 
+-  
++
+   /// Called when the mark view is removed from the editor or the whole
+   /// editor is destroyed.
+   destroy?: () => void
+@@ -1376,7 +1376,6 @@ class ViewTreeUpdater {
+       // Avoid bugs in Safari's cursor drawing (#1165) and Chrome's mouse selection (#1152)
+       if ((browser.safari || browser.chrome) && lastChild && (lastChild.dom as HTMLElement).contentEditable == "false")
+         this.addHackNode("IMG", parent)
+-      this.addHackNode("BR", this.top)
+     }
+   }
+ 

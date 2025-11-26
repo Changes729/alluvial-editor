@@ -41,6 +41,18 @@
       a {
         cursor: pointer;
       }
+
+      p {
+        white-space: pre-wrap;
+        box-sizing: border-box;
+        word-break: normal;
+      }
+
+      p:empty:after {
+        content: "\200B";
+        box-sizing: border-box;
+        display: block;
+      }
     }
   }
 }

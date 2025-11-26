@@ -1,0 +1,26 @@
+diff --git a/lib/index.js b/lib/index.js
+index e3114679f34ceec3296f0095159c582933e419bc..74760779d5a99ecb87c01dca473698079cddee73 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -466,7 +466,7 @@ const paragraphSchema = $nodeSchema("paragraph", (ctx) => ({
+       const lastNode = view.state?.doc.lastChild;
+       state.openNode("paragraph");
+       if ((!node.content || node.content.size === 0) && node !== lastNode && shouldPreserveEmptyLine(ctx)) {
+-        state.addNode("html", void 0, "<br />");
++        state.addNode("text", void 0, '\n');
+       } else {
+         serializeText(state, node);
+       }
+diff --git a/src/node/paragraph.ts b/src/node/paragraph.ts
+index 56a67dd0383ef97b1f02d41045a8db7c38e23237..da3fbf70eaf869e4160fef76c33dad291071a2ff 100644
+--- a/src/node/paragraph.ts
++++ b/src/node/paragraph.ts
+@@ -43,7 +43,7 @@ export const paragraphSchema = $nodeSchema('paragraph', (ctx) => ({
+         node !== lastNode &&
+         shouldPreserveEmptyLine(ctx)
+       ) {
+-        state.addNode('html', undefined, '<br />')
++        state.addNode('text', undefined, '\n')
+       } else {
+         serializeText(state, node)
+       }
