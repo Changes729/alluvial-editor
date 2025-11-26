@@ -15,6 +15,7 @@ import { gfm } from "@milkdown/kit/preset/gfm";
 import style from "./milkdown.module.scss";
 
 import { listItemBlockComponent } from "./list-item-block";
+import { linkInputRuleCustom } from "./link/inputRules";
 
 interface DocState {
   editable: boolean;
@@ -43,7 +44,8 @@ class MilkDownEditor extends Component<
       .use(commonmark)
       .use(gfm)
       .use(history)
-      .use(listItemBlockComponent);
+      .use(listItemBlockComponent)
+      .use(linkInputRuleCustom);
 
     this.UpdateEditorContent = this.UpdateEditorContent.bind(this);
     this.Content = this.Content.bind(this);
