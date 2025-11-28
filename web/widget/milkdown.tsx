@@ -19,7 +19,14 @@ import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
 import { gfm } from "@milkdown/kit/preset/gfm";
 import { MilkdownPlugin } from "@milkdown/ctx";
-import { linkTooltipPlugin, configureLinkTooltip } from "@milkdown/kit/component/link-tooltip";
+import {
+  linkTooltipPlugin,
+  configureLinkTooltip,
+} from "@milkdown/kit/component/link-tooltip";
+import {
+  imageBlockComponent,
+  imageBlockConfig,
+} from "@milkdown/kit/component/image-block";
 
 import style from "./milkdown.module.scss";
 
@@ -66,6 +73,17 @@ class MilkDownEditor extends Component<
 
       .config(configureLinkTooltip)
       .use(linkTooltipPlugin)
+
+      .use(imageBlockComponent)
+      .config((ctx) => {
+        ctx.update(imageBlockConfig.key, (defaultConfig) => ({
+          ...defaultConfig,
+          // onUpload: async (file: File) => {
+          //   const url = await YourUploadAPI(file);
+          //   return url;
+          // },
+        }));
+      })
 
       .config((ctx) => {
         ctx.set(rootCtx, "#readme");

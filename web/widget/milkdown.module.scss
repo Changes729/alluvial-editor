@@ -9,6 +9,7 @@
 /** phone has high dpi */
 // @import url("@milkdown/theme-nord/style.css") (resolution: 1dppx);
 @import "./link-tooltip.scss" (resolution: 1dppx);
+@import "./image-block.scss" (resolution: 1dppx);
 @import url(./markdown.scss) (resolution: 1dppx);
 @media (resolution: 1dppx) {
   .container {
@@ -47,17 +48,35 @@
         tab-size: 4;
       }
 
-      p, span {
+      p,
+      span {
         white-space: pre-wrap;
         box-sizing: border-box;
         word-break: normal;
       }
 
-      p:empty:after, span:empty:after {
+      p:empty:after {
         content: "\200B";
         box-sizing: border-box;
         display: block;
       }
+
+      span:empty:after {
+        content: "&";
+        box-sizing: border-box;
+        display: block;
+      }
+
+      // p {
+      //   span {
+      //     display: none;
+      //   }
+      // }
+      // p:focus {
+      //   span {
+      //     display: inline;
+      //   }
+      // }
     }
   }
 }

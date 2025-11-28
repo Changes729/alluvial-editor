@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  '@milkdown/preset-commonmark':
-    hash: 9b96a054bdede9c5fdcafe96fc610e4c3c0b655bbff650499a32ccb16cf0bde2
-    path: patches/@milkdown__preset-commonmark.patch
   prosemirror-view:
     hash: e3b0708ce711db34e8a2ecca0b27b0df89e438f786c01c4a658363b55eb96e35
     path: patches/prosemirror-view.patch
@@ -36,7 +33,7 @@ importers:
         version: 7.17.2(@codemirror/language@6.11.3)(@codemirror/state@6.5.2)(@codemirror/view@6.38.8)(typescript@5.9.3)
       '@milkdown/preset-commonmark':
         specifier: ^7.17.1
-        version: 7.17.2(patch_hash=9b96a054bdede9c5fdcafe96fc610e4c3c0b655bbff650499a32ccb16cf0bde2)
+        version: 7.17.2
       '@milkdown/prose':
         specifier: ^7.17.1
         version: 7.17.2
@@ -1552,7 +1549,7 @@ snapshots:
       '@milkdown/ctx': 7.17.2
       '@milkdown/exception': 7.17.2
       '@milkdown/plugin-tooltip': 7.17.2
-      '@milkdown/preset-commonmark': 7.17.2(patch_hash=9b96a054bdede9c5fdcafe96fc610e4c3c0b655bbff650499a32ccb16cf0bde2)
+      '@milkdown/preset-commonmark': 7.17.2
       '@milkdown/preset-gfm': 7.17.2
       '@milkdown/prose': 7.17.2
       '@milkdown/transformer': 7.17.2
@@ -1601,7 +1598,7 @@ snapshots:
       '@milkdown/plugin-tooltip': 7.17.2
       '@milkdown/plugin-trailing': 7.17.2
       '@milkdown/plugin-upload': 7.17.2
-      '@milkdown/preset-commonmark': 7.17.2(patch_hash=9b96a054bdede9c5fdcafe96fc610e4c3c0b655bbff650499a32ccb16cf0bde2)
+      '@milkdown/preset-commonmark': 7.17.2
       '@milkdown/preset-gfm': 7.17.2
       '@milkdown/prose': 7.17.2
       '@milkdown/transformer': 7.17.2
@@ -1710,7 +1707,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@milkdown/preset-commonmark@7.17.2(patch_hash=9b96a054bdede9c5fdcafe96fc610e4c3c0b655bbff650499a32ccb16cf0bde2)':
+  '@milkdown/preset-commonmark@7.17.2':
     dependencies:
       '@milkdown/core': 7.17.2
       '@milkdown/ctx': 7.17.2
@@ -1729,7 +1726,7 @@ snapshots:
       '@milkdown/core': 7.17.2
       '@milkdown/ctx': 7.17.2
       '@milkdown/exception': 7.17.2
-      '@milkdown/preset-commonmark': 7.17.2(patch_hash=9b96a054bdede9c5fdcafe96fc610e4c3c0b655bbff650499a32ccb16cf0bde2)
+      '@milkdown/preset-commonmark': 7.17.2
       '@milkdown/prose': 7.17.2
       '@milkdown/transformer': 7.17.2
       '@milkdown/utils': 7.17.2
