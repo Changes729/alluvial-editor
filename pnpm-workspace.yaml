@@ -1,3 +1,2 @@
 patchedDependencies:
-  '@milkdown/preset-commonmark': patches/@milkdown__preset-commonmark.patch
   prosemirror-view: patches/prosemirror-view.patch

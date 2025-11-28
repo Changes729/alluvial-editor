@@ -90,6 +90,16 @@ class MilkDownEditor extends Component<
     };
   }
 
+  EmptyLinePrefix(content: string | null) {
+    if (content == null) {
+      return null;
+    }
+
+    return content
+      .replace(/\n\n/g, "<br/>\n\n")
+      .replace(/([^\n])<br\/>\n/g, "$1\n\n");
+  }
+
   UpdateEditorContent(newContent: string | null) {
     if (newContent) {
       this._editor.config((ctx) => {
@@ -112,7 +122,7 @@ class MilkDownEditor extends Component<
       ? this.props.defContent
       : localStorage.getItem("docContent");
 
-    this.UpdateEditorContent(defContent);
+    this.UpdateEditorContent(this.EmptyLinePrefix(defContent));
     /** NOTE: create is an async function. if set content after create. will failed. */
     this._editor.create();
     setInterval(() => this._fileAutoSave(), 1000);

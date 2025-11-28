@@ -29,7 +29,9 @@ class MilkdownPC extends Component<{}, {}> {
             const fileContent = event.target?.result;
             if (typeof fileContent === "string") {
               this._fileHandler = fileHandle;
-              this._editor.current?.UpdateEditorContent(fileContent);
+              this._editor.current?.UpdateEditorContent(
+                this._editor.current?.EmptyLinePrefix(fileContent)
+              );
             }
           };
           reader.readAsText(file);

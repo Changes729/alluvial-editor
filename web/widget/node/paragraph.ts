@@ -46,7 +46,7 @@ export const paragraphSchema = $nodeSchema("paragraph", (ctx) => ({
         node !== lastNode &&
         shouldPreserveEmptyLine(ctx)
       ) {
-        state.addNode("text", undefined, "\n");
+        state.addNode("text", undefined, "");
       } else {
         serializeText(state, node);
       }
