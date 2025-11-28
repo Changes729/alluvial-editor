@@ -3,23 +3,45 @@ import React, { Component } from "react";
 import {
   defaultValueCtx,
   Editor,
+  editorStateOptionsCtx,
   editorViewOptionsCtx,
+  inputRulesCtx,
   rootCtx,
 } from "@milkdown/kit/core";
 import { history } from "@milkdown/kit/plugin/history";
-import { commonmark } from "@milkdown/kit/preset/commonmark";
+import {
+  commands,
+  inputRules,
+  keymap,
+  plugins,
+} from "@milkdown/kit/preset/commonmark";
 import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
 import { gfm } from "@milkdown/kit/preset/gfm";
+import { MilkdownPlugin } from "@milkdown/ctx";
 
 import style from "./milkdown.module.scss";
 
-import { listItemBlockComponent } from "./list-item-block";
-import { linkInputRuleCustom } from "./link/inputRules";
+import { listItemBlockComponent } from "./view";
+import { linkInputRuleCustom } from "./inputRules/link";
+import { schema } from "./schema";
+import { markInputRules } from "./markInputRules";
+import { customInputRulesRun } from "../utils/custom-input-rules";
+import { Plugin } from "@milkdown/prose/state";
+import { customInputRulesKey } from "@milkdown/prose";
 
 interface DocState {
   editable: boolean;
 }
+
+const commonmark: MilkdownPlugin[] = [
+  schema,
+  inputRules,
+  markInputRules,
+  commands,
+  keymap,
+  plugins,
+].flat();
 
 class MilkDownEditor extends Component<
   { editable?: boolean; defContent?: string },
@@ -34,18 +56,29 @@ class MilkDownEditor extends Component<
     };
 
     this._editor = Editor.make()
-      .config((ctx) => {
-        ctx.set(rootCtx, "#readme");
-        ctx.set(editorViewOptionsCtx, {
-          editable: () => this.state.editable,
-        });
-      })
       .config(nord)
       .use(commonmark)
       .use(gfm)
       .use(history)
       .use(listItemBlockComponent)
-      .use(linkInputRuleCustom);
+      .use(linkInputRuleCustom)
+      .config((ctx) => {
+        ctx.set(rootCtx, "#readme");
+        ctx.set(editorViewOptionsCtx, {
+          editable: () => this.state.editable,
+        });
+        ctx.set(editorStateOptionsCtx, (x) => {
+          const rules = ctx.get(inputRulesCtx);
+          x.plugins?.forEach((plugin: Plugin) => {
+            if (plugin.spec.key == customInputRulesKey) {
+              plugin.props.handleTextInput = (view, from, to, text) => {
+                return customInputRulesRun(view, from, to, text, rules, plugin);
+              };
+            }
+          });
+          return x;
+        });
+      });
 
     this.UpdateEditorContent = this.UpdateEditorContent.bind(this);
     this.Content = this.Content.bind(this);

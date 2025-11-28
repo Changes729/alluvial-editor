@@ -46,13 +46,13 @@
         tab-size: 4;
       }
 
-      p {
+      p, span {
         white-space: pre-wrap;
         box-sizing: border-box;
         word-break: normal;
       }
 
-      p:empty:after {
+      p:empty:after, span:empty:after {
         content: "\200B";
         box-sizing: border-box;
         display: block;

@@ -96,7 +96,6 @@ export const listItemBlockView = $view(
         },
         destroy: () => {
           disposeSelectedWatcher;
-          // root.unmount();
           dom.remove();
           contentDOM.remove();
         },

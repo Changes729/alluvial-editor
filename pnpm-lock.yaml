@@ -43,6 +43,9 @@ importers:
       '@milkdown/theme-nord':
         specifier: ^7.17.1
         version: 7.17.2
+      '@milkdown/transformer':
+        specifier: ^7.17.2
+        version: 7.17.2
       '@milkdown/utils':
         specifier: ^7.17.1
         version: 7.17.2
@@ -70,6 +73,15 @@ importers:
       postcss-modules:
         specifier: ^6.0.1
         version: 6.0.1(postcss@8.5.6)
+      prosemirror-inputrules:
+        specifier: ^1.5.1
+        version: 1.5.1
+      prosemirror-model:
+        specifier: ^1.25.4
+        version: 1.25.4
+      prosemirror-state:
+        specifier: ^1.4.4
+        version: 1.4.4
       prosemirror-view:
         specifier: ^1.41.3
         version: 1.41.3(patch_hash=e3b0708ce711db34e8a2ecca0b27b0df89e438f786c01c4a658363b55eb96e35)
