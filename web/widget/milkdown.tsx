@@ -19,6 +19,7 @@ import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
 import { gfm } from "@milkdown/kit/preset/gfm";
 import { MilkdownPlugin } from "@milkdown/ctx";
+import { linkTooltipPlugin, configureLinkTooltip } from "@milkdown/kit/component/link-tooltip";
 
 import style from "./milkdown.module.scss";
 
@@ -62,6 +63,10 @@ class MilkDownEditor extends Component<
       .use(history)
       .use(listItemBlockComponent)
       .use(linkInputRuleCustom)
+
+      .config(configureLinkTooltip)
+      .use(linkTooltipPlugin)
+
       .config((ctx) => {
         ctx.set(rootCtx, "#readme");
         ctx.set(editorViewOptionsCtx, {
