@@ -4,6 +4,8 @@
   "scripts": {
     "build": "node esbuild.mjs"
   },
+  "type": "module",
+  "main": "web/widget/milkdown.tsx",
   "author": "asuki",
   "description": "",
   "dependencies": {
