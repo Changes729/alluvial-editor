@@ -8,8 +8,7 @@
 /** github markdown container style. */
 /** phone has high dpi */
 // @import url("@milkdown/theme-nord/style.css") (resolution: 1dppx);
-@import "./link-tooltip.scss" (resolution: 1dppx);
-@import "./image-block.scss" (resolution: 1dppx);
+@import url(./link-tooltip.scss) (resolution: 1dppx);
 @import url(./markdown.scss) (resolution: 1dppx);
 @media (resolution: 1dppx) {
   .container {

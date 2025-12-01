@@ -18,10 +18,6 @@ import {
   linkTooltipPlugin,
   configureLinkTooltip,
 } from "@milkdown/kit/component/link-tooltip";
-import {
-  imageBlockComponent,
-  imageBlockConfig,
-} from "@milkdown/kit/component/image-block";
 
 import style from "./milkdown.module.scss";
 
@@ -68,17 +64,6 @@ class MilkDownEditor extends Component<
 
       .config(configureLinkTooltip)
       .use(linkTooltipPlugin)
-
-      .use(imageBlockComponent)
-      .config((ctx) => {
-        ctx.update(imageBlockConfig.key, (defaultConfig) => ({
-          ...defaultConfig,
-          // onUpload: async (file: File) => {
-          //   const url = await YourUploadAPI(file);
-          //   return url;
-          // },
-        }));
-      })
 
       .config((ctx) => {
         ctx.set(rootCtx, "#readme");
