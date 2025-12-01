@@ -9,12 +9,7 @@ import {
   rootCtx,
 } from "@milkdown/kit/core";
 import { history } from "@milkdown/kit/plugin/history";
-import {
-  commands,
-  inputRules,
-  keymap,
-  plugins,
-} from "@milkdown/kit/preset/commonmark";
+import { commands, keymap, plugins } from "@milkdown/kit/preset/commonmark";
 import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
 import { gfm } from "@milkdown/kit/preset/gfm";
@@ -33,7 +28,7 @@ import style from "./milkdown.module.scss";
 import { listItemBlockComponent } from "./view";
 import { linkInputRuleCustom } from "./inputRules/link";
 import { schema } from "./schema";
-import { markInputRules } from "./markInputRules";
+import { markInputRules, inputRules } from "./markInputRules";
 import { customInputRulesRun } from "../utils/custom-input-rules";
 import { Plugin } from "@milkdown/prose/state";
 import { customInputRulesKey } from "@milkdown/prose";
