@@ -107,7 +107,7 @@ class MilkDownEditor extends React.Component<MilkdownProps, DocState> {
   }
 
   UpdateEditorContent(newContent: string | null) {
-    if (newContent) {
+    if (newContent != null) {
       this._editor.config((ctx) => {
         ctx.set(defaultValueCtx, newContent);
       });
