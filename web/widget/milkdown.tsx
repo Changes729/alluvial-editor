@@ -33,6 +33,12 @@ interface DocState {
   editable: boolean;
 }
 
+interface MilkdownProps {
+  editable?: boolean;
+  defContent?: string;
+  className?: string;
+}
+
 const commonmark: MilkdownPlugin[] = [
   schema,
   inputRules,
@@ -42,13 +48,10 @@ const commonmark: MilkdownPlugin[] = [
   plugins,
 ].flat();
 
-class MilkDownEditor extends Component<
-  { editable?: boolean; defContent?: string },
-  DocState
-> {
+class MilkDownEditor extends React.Component<MilkdownProps, DocState> {
   private _editor: Editor;
 
-  constructor(props: { editable?: boolean }) {
+  constructor(props: MilkdownProps) {
     super(props);
     this.state = {
       editable: this.props.editable != undefined ? this.props.editable : true,
@@ -125,7 +128,10 @@ class MilkDownEditor extends Component<
 
   render() {
     return (
-      <div id="readme" className={`${style.container} markdown-body`}></div>
+      <div
+        id="readme"
+        className={`${this.props.className}  ${style.container} markdown-body`}
+      ></div>
     );
   }
 }
