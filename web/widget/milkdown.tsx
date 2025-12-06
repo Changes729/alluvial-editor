@@ -116,19 +116,11 @@ class MilkDownEditor extends Component<
     return this._editor.action(getMarkdown());
   }
 
-  _fileAutoSave() {
-    localStorage.setItem("docContent", this.Content());
-  }
-
   componentDidMount() {
-    const defContent = this.props.defContent
-      ? this.props.defContent
-      : localStorage.getItem("docContent");
-
+    const defContent = this.props.defContent ? this.props.defContent : "";
     this.UpdateEditorContent(this.EmptyLinePrefix(defContent));
     /** NOTE: create is an async function. if set content after create. will failed. */
     this._editor.create();
-    setInterval(() => this._fileAutoSave(), 1000);
   }
 
   render() {

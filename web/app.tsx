@@ -75,6 +75,18 @@ class MilkdownPC extends Component<{}, {}> {
     }
   }
 
+  _fileAutoSave() {
+    localStorage.setItem("docContent", this._editor.current!.Content());
+  }
+
+  componentDidMount(): void {
+    const editor = this._editor.current!;
+    if (!this._fileHandler && editor.Content().trim().length == 0) {
+      editor.UpdateEditorContent(localStorage.getItem("docContent"));
+    }
+    setInterval(() => this._fileAutoSave(), 1000);
+  }
+
   render() {
     return (
       <div className="home" onKeyDown={this.onkeydown}>
