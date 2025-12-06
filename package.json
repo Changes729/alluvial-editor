@@ -20,8 +20,6 @@
     "@milkdown/theme-nord": "^7.17.1",
     "@milkdown/transformer": "^7.17.2",
     "@milkdown/utils": "^7.17.1",
-    "@types/react": "^19.2.6",
-    "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.22",
     "esbuild": "^0.27.0",
     "esbuild-sass-plugin": "^3.3.1",
@@ -32,13 +30,15 @@
     "prosemirror-model": "^1.25.4",
     "prosemirror-state": "^1.4.4",
     "prosemirror-view": "^1.41.3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "react-router": "^7.9.6",
     "sass-embedded": "^1.93.3",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
     "typescript-plugin-css-modules": "^5.2.0"
   }
 }
