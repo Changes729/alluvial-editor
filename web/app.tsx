@@ -81,7 +81,7 @@ class MilkdownPC extends Component<{}, {}> {
 
   componentDidMount(): void {
     const editor = this._editor.current!;
-    if (!this._fileHandler && editor.Content().trim().length == 0) {
+    if (!this._fileHandler) {
       editor.UpdateEditorContent(localStorage.getItem("docContent"));
     }
     setInterval(() => this._fileAutoSave(), 1000);
