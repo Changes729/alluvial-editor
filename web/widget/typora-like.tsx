@@ -48,7 +48,7 @@ const commonmark: MilkdownPlugin[] = [
   plugins,
 ].flat();
 
-class MilkDownEditor extends React.Component<MilkdownProps, DocState> {
+export class MilkDownEditor extends React.Component<MilkdownProps, DocState> {
   private _editor: Editor;
 
   constructor(props: MilkdownProps) {
@@ -135,5 +135,3 @@ class MilkDownEditor extends React.Component<MilkdownProps, DocState> {
     );
   }
 }
-
-export default MilkDownEditor;
