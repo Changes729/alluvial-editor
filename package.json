@@ -5,7 +5,7 @@
     "build": "node esbuild.mjs"
   },
   "type": "module",
-  "main": "web/widget/milkdown.tsx",
+  "main": "web/module.index.ts",
   "author": "asuki",
   "description": "",
   "dependencies": {
