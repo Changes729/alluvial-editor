@@ -1,25 +1,17 @@
-import React, { Component, ReactElement } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router";
 
 import "./css/index.scss";
-import MilkdownPhone from "./pages/milkdown-phone";
-import Milkdown from "./widget/milkdown";
-import { getDeviceInfos } from "./utils/dev-infos";
+import { EmptyLinePrefix, TyporaEditor } from "./widget/editor";
+import { getMarkdown } from "@milkdown/utils";
+import { BasicEditorView } from "./module.index";
 
-class MilkdownPC extends Component<{}, {}> {
-  private _fileHandler: FileSystemFileHandle | null = null;
-  private _editor = React.createRef<Milkdown>();
+const MilkdownPC: React.FC<{}> = ({}) => {
+  var fileHandler: FileSystemFileHandle | null = null;
+  const _editor = useRef<TyporaEditor>(TyporaEditor.make());
 
-  constructor(props: {}) {
-    super(props);
-
-    this.onkeydown = this.onkeydown.bind(this);
-    this.saveFile = this.saveFile.bind(this);
-    this.openFile = this.openFile.bind(this);
-  }
-
-  async openFile() {
+  async function openFile() {
     try {
       const [fileHandle] = await (window as any).showOpenFilePicker();
       if (fileHandle) {
@@ -28,10 +20,8 @@ class MilkdownPC extends Component<{}, {}> {
           reader.onload = (event) => {
             const fileContent = event.target?.result;
             if (typeof fileContent === "string") {
-              this._fileHandler = fileHandle;
-              this._editor.current?.UpdateEditorContent(
-                this._editor.current?.EmptyLinePrefix(fileContent)
-              );
+              fileHandler = fileHandle;
+              _editor.current.UpdateEditorContent(EmptyLinePrefix(fileContent));
             }
           };
           reader.readAsText(file);
@@ -42,11 +32,11 @@ class MilkdownPC extends Component<{}, {}> {
     }
   }
 
-  async saveFile() {
-    const content = this._editor.current?.Content();
+  async function saveFile() {
+    const content = _editor.current.action(getMarkdown());
     try {
-      if (!this._fileHandler) {
-        this._fileHandler = await (window as any).showSaveFilePicker({
+      if (!fileHandler) {
+        fileHandler = await (window as any).showSaveFilePicker({
           suggestedName: "untitled.md",
           types: [
             {
@@ -56,7 +46,7 @@ class MilkdownPC extends Component<{}, {}> {
         });
       }
 
-      const writableStream = await this._fileHandler!.createWritable();
+      const writableStream = await fileHandler!.createWritable();
       await writableStream.write(content ? content : "");
       await writableStream.close();
       console.log("File saved successfully!");
@@ -65,36 +55,37 @@ class MilkdownPC extends Component<{}, {}> {
     }
   }
 
-  onkeydown(e: React.KeyboardEvent<HTMLDivElement>) {
+  function onkeydown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === "o" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      this.openFile();
+      openFile();
     } else if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      this.saveFile();
+      saveFile();
     }
   }
 
-  _fileAutoSave() {
-    localStorage.setItem("docContent", this._editor.current!.Content());
+  function _fileAutoSave() {
+    console.log("auto save");
+    localStorage.setItem("docContent", _editor.current.action(getMarkdown()));
   }
 
-  componentDidMount(): void {
-    const editor = this._editor.current!;
-    if (!this._fileHandler) {
-      editor.UpdateEditorContent(localStorage.getItem("docContent"));
+  useEffect(() => {
+    if (fileHandler == null) {
+      _editor.current.UpdateEditorContent(
+        EmptyLinePrefix(localStorage.getItem("docContent"))
+      );
     }
-    setInterval(() => this._fileAutoSave(), 1000);
-  }
+    _editor.current.create();
+    setInterval(() => _fileAutoSave(), 1000);
+  });
 
-  render() {
-    return (
-      <div className="home" onKeyDown={this.onkeydown}>
-        <Milkdown ref={this._editor}></Milkdown>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="home" onKeyDown={onkeydown}>
+      <BasicEditorView editor={_editor.current}></BasicEditorView>
+    </div>
+  );
+};
 
 function App() {
   onload = () => {
@@ -104,13 +95,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          index
-          path="/"
-          element={
-            getDeviceInfos().isMobile ? <MilkdownPhone /> : <MilkdownPC />
-          }
-        />
+        <Route index path="/" element={<MilkdownPC />} />
       </Routes>
     </BrowserRouter>
   );
