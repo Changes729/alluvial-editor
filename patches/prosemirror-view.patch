@@ -1,5 +1,5 @@
 diff --git a/dist/index.js b/dist/index.js
-index 08aa138d630f9e40e6f314ab54f35a0f81fd3e3a..b5f1216b7f31bfcdeb11c0f0b78e7c4a815bf62d 100644
+index 08aa138d630f9e40e6f314ab54f35a0f81fd3e3a..3f54a19a546a12e371dad06272945f0d3bb7f8b7 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -736,7 +736,7 @@ const NOT_DIRTY = 0, CHILD_DIRTY = 1, CONTENT_DIRTY = 2, NODE_DIRTY = 3;
@@ -34,6 +34,17 @@ index 08aa138d630f9e40e6f314ab54f35a0f81fd3e3a..b5f1216b7f31bfcdeb11c0f0b78e7c4a
      /**
      @internal
      */
+@@ -5100,8 +5099,8 @@ function readDOMChange(view, from, to, typeOver, addedNodes) {
+             }
+             let tr = mkTr(view.state.tr.delete(chFrom, chTo));
+             let marks = doc.resolve(change.start).marksAcross(doc.resolve(change.endA));
+-            if (marks)
+-                tr.ensureMarks(marks);
++            // if (marks)
++                // tr.ensureMarks(marks);
+             view.dispatch(tr);
+         }
+         else if ( // Adding or removing a mark
 @@ -5622,7 +5621,7 @@ class EditorView {
      possible to the content before the position. When positive,
      prefer positions close to the content after the position. When
