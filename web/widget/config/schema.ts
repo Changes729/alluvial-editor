@@ -33,8 +33,9 @@ import {
   textSchema,
 } from "@milkdown/kit/preset/commonmark";
 
-import { paragraphAttr, paragraphSchema } from "./node/paragraph";
-import { spanAttr, spanSchema } from "./node/span";
+import { paragraphAttr, paragraphSchema } from "../node/paragraph";
+import { spanAttr, spanSchema } from "../node/span";
+import { noHeadingAttr, noHeadingSchema } from "../node/noHeading";
 
 export const schema: MilkdownPlugin[] = [
   docSchema,
@@ -48,6 +49,60 @@ export const schema: MilkdownPlugin[] = [
   headingIdGenerator,
   headingAttr,
   headingSchema,
+
+  hardbreakAttr,
+  hardbreakSchema,
+
+  blockquoteAttr,
+  blockquoteSchema,
+
+  codeBlockAttr,
+  codeBlockSchema,
+
+  hrAttr,
+  hrSchema,
+
+  imageAttr,
+  imageSchema,
+
+  bulletListAttr,
+  bulletListSchema,
+
+  orderedListAttr,
+  orderedListSchema,
+
+  listItemAttr,
+  listItemSchema,
+
+  emphasisAttr,
+  emphasisSchema,
+
+  strongAttr,
+  strongSchema,
+
+  inlineCodeAttr,
+  inlineCodeSchema,
+
+  linkAttr,
+  linkSchema,
+
+  htmlAttr,
+  htmlSchema,
+
+  textSchema,
+].flat();
+
+export const tidalSchema: MilkdownPlugin[] = [
+  docSchema,
+
+  paragraphAttr,
+  paragraphSchema,
+
+  spanAttr,
+  spanSchema,
+
+  noHeadingAttr,
+  noHeadingSchema,
 
   hardbreakAttr,
   hardbreakSchema,

@@ -30,3 +30,13 @@ export const markInputRules: MilkdownPlugin[] = [
   inlineCodeInputRule,
   strongInputRule,
 ];
+
+
+export const tidalInputRules: MilkdownPlugin[] = [
+  wrapInBlockquoteInputRule,
+  wrapInBulletListInputRule,
+  wrapInOrderedListInputRule,
+  createCodeBlockInputRule,
+  insertHrInputRule,
+  insertImageInputRule,
+].flat()

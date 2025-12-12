@@ -9,9 +9,18 @@
   "author": "asuki",
   "description": "",
   "dependencies": {
-    "@codemirror/language": "^6.11.3",
-    "@codemirror/state": "^6.5.2",
-    "@codemirror/view": "^6.38.8",
+    "@floating-ui/dom": "^1.7.4",
+    "github-markdown-css": "^5.8.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.0",
+    "esbuild-sass-plugin": "^3.3.1",
+    "typescript": "^5.9.3",
+    "postcss": "^8.5.6",
+    "postcss-modules": "^6.0.1",
+    "sass-embedded": "^1.93.3",
+    "autoprefixer": "^10.4.22",
+    "@types/lodash-es": "^4.17.12",
     "@milkdown/core": "^7.17.2",
     "@milkdown/ctx": "^7.17.1",
     "@milkdown/kit": "^7.17.1",
@@ -20,25 +29,19 @@
     "@milkdown/theme-nord": "^7.17.1",
     "@milkdown/transformer": "^7.17.2",
     "@milkdown/utils": "^7.17.1",
-    "autoprefixer": "^10.4.22",
-    "esbuild": "^0.27.0",
-    "esbuild-sass-plugin": "^3.3.1",
-    "github-markdown-css": "^5.8.1",
-    "postcss": "^8.5.6",
-    "postcss-modules": "^6.0.1",
     "prosemirror-inputrules": "^1.5.1",
     "prosemirror-model": "^1.25.4",
     "prosemirror-state": "^1.4.4",
     "prosemirror-view": "^1.41.3",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "react-router": "^7.9.6",
-    "sass-embedded": "^1.93.3",
-    "typescript": "^5.9.3"
-  },
-  "devDependencies": {
+    "@codemirror/language": "^6.11.3",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.38.8",
+    "lodash-es": "^4.17.21",
+    "typescript-plugin-css-modules": "^5.2.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "typescript-plugin-css-modules": "^5.2.0"
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "react-router": "^7.9.6"
   }
 }

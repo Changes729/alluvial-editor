@@ -66,7 +66,6 @@ const MilkdownPC: React.FC<{}> = ({}) => {
   }
 
   function _fileAutoSave() {
-    console.log("auto save");
     localStorage.setItem("docContent", _editor.current.action(getMarkdown()));
   }
 

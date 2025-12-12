@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Editor, rootCtx } from "@milkdown/core";
 import style from "./milkdown.module.scss";
 
@@ -11,7 +11,7 @@ export const BasicEditorView: React.FC<TidalProps> = ({
   editor,
   classStyle,
 }) => {
-  const _placeholder = React.useRef<HTMLDivElement>(null);
+  const _placeholder = useRef<HTMLDivElement>(null);
 
   /** componentDidMount */
   useEffect(() => {
