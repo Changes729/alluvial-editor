@@ -35,7 +35,7 @@ import {
 
 import { paragraphAttr, paragraphSchema } from "../node/paragraph";
 import { spanAttr, spanSchema } from "../node/span";
-import { noHeadingAttr, noHeadingSchema } from "../node/noHeading";
+import { tidalHeadingAttr, tidalHeadingSchema } from "../node/tidalHeading";
 
 export const schema: MilkdownPlugin[] = [
   docSchema,
@@ -101,8 +101,9 @@ export const tidalSchema: MilkdownPlugin[] = [
   spanAttr,
   spanSchema,
 
-  noHeadingAttr,
-  noHeadingSchema,
+  headingIdGenerator,
+  tidalHeadingAttr,
+  tidalHeadingSchema,
 
   hardbreakAttr,
   hardbreakSchema,

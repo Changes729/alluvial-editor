@@ -12,7 +12,7 @@ import {
   wrapInHeadingInputRule,
   wrapInOrderedListInputRule,
 } from "@milkdown/kit/preset/commonmark";
-
+import { wrapInTidalHeadingInputRule } from "../node/tidalHeading";
 
 export const inputRules: MilkdownPlugin[] = [
   wrapInBlockquoteInputRule,
@@ -22,7 +22,7 @@ export const inputRules: MilkdownPlugin[] = [
   insertHrInputRule,
   wrapInHeadingInputRule,
   insertImageInputRule,
-].flat()
+].flat();
 
 export const markInputRules: MilkdownPlugin[] = [
   emphasisStarInputRule,
@@ -31,12 +31,12 @@ export const markInputRules: MilkdownPlugin[] = [
   strongInputRule,
 ];
 
-
 export const tidalInputRules: MilkdownPlugin[] = [
   wrapInBlockquoteInputRule,
   wrapInBulletListInputRule,
   wrapInOrderedListInputRule,
   createCodeBlockInputRule,
   insertHrInputRule,
+  wrapInTidalHeadingInputRule,
   insertImageInputRule,
-].flat()
+].flat();
