@@ -18,6 +18,7 @@ export const BasicEditorView: React.FC<TidalProps> = ({
     editor.config((ctx) => {
       ctx.set(rootCtx, _placeholder.current);
     });
+    editor.create();
   }, []);
 
   return (
