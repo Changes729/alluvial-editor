@@ -48,3 +48,5 @@ yarn.lock
 go.work
 
 .DS_Store
+
+markdown/

@@ -1,16 +1,77 @@
 package main
 
-import webview "github.com/webview/webview_go"
+import (
+	"fmt"
+	"io"
+	"io/ioutil"
+	"log/slog"
+	"main/src/api"
+	"net/http"
+	"os"
+	"strings"
 
-const html = `<script src="http://localhost:20080/app.js"></script><link href="http://localhost:20080/app.css" rel="stylesheet">`
+	"github.com/gorilla/mux"
+)
+
+func AlluvialServer(r *mux.Router, prefix string, root_path string) {
+	fsys := AlluvialFileSystem{http.Dir(root_path)}
+	fs := FileServer(fsys)
+	router := r.PathPrefix(prefix).Subrouter()
+
+	router.PathPrefix("/").Handler(http.StripPrefix(prefix, fs)).Methods("GET")
+	router.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "private")
+		path := strings.TrimPrefix(r.URL.Path, prefix+"/")
+		reader, err := r.MultipartReader()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		for {
+			part, err := reader.NextPart()
+			if err == io.EOF {
+				break
+			}
+
+			fmt.Printf("FileName=[%s], FormName=[%s]\n", part.FileName(), part.FormName())
+			if part.FileName() == "" { // this is FormData``
+				data, _ := ioutil.ReadAll(part)
+				fmt.Printf("FormData=[%s]\n", string(data))
+			} else { // This is FileData
+				os.MkdirAll(root_path+path, 0755)
+				dst, _ := os.Create(root_path + path + part.FileName())
+				defer dst.Close()
+				io.Copy(dst, part)
+			}
+		}
+	}).Methods("POST").MatcherFunc(func(r *http.Request, rm *mux.RouteMatch) bool {
+		return is_authorization(r)
+	})
+}
 
 func main() {
-	w := webview.New(false)
-	defer w.Destroy()
-	w.SetTitle("Alluvial Editor")
-	w.SetSize(480, 320, webview.HintNone)
+	var programLevel = new(slog.LevelVar)
+	programLevel.Set(slog.LevelDebug)
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: programLevel}))
+	slog.SetDefault(logger)
 
-	// w.SetHtml(html)
-	w.Navigate("http://localhost:3000/")
-	w.Run()
+	r := mux.NewRouter()
+	api.Init(r)
+	AlluvialServer(r, "/markdowns", "./markdown/")
+
+	web := http.FileServer(http.Dir("./dist/"))
+	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "private")
+		fpath, _ := os.Getwd()
+		fpath += ("/dist" + r.URL.Path)
+
+		if _, err := os.Stat(fpath); err == nil {
+			web.ServeHTTP(w, r)
+		} else {
+			http.ServeFile(w, r, "./dist/index.html")
+		}
+	}).Methods("GET")
+
+	http.ListenAndServe(":20081", r)
 }

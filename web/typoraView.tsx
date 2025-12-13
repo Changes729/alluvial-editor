@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router";
 
-import "./css/index.scss";
 import { EmptyLinePrefix, TyporaEditor } from "./widget/editor";
 import { getMarkdown } from "@milkdown/utils";
 import { BasicEditorView } from "./module.index";

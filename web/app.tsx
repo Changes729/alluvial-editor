@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router";
 
 import "./css/index.scss";
 import { TyporaEditorView } from "./typoraView";
+import AlluvialTidal from "./AlluvialTidal";
 
 function App() {
   onload = () => {
@@ -14,6 +15,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index path="/" element={<TyporaEditorView />} />
+        <Route index path="/tidal-test" element={<AlluvialTidal />} />
       </Routes>
     </BrowserRouter>
   );
