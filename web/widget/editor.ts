@@ -1,20 +1,25 @@
 import {
+  DefaultValue,
   defaultValueCtx,
   Editor,
   editorStateOptionsCtx,
   EditorStatus,
+  editorViewCtx,
+  getDoc,
   inputRulesCtx,
+  parserCtx,
+  schemaCtx,
 } from "@milkdown/kit/core";
 import { history } from "@milkdown/kit/plugin/history";
 import { nord } from "@milkdown/theme-nord";
 import { gfm } from "@milkdown/kit/preset/gfm";
-import { MilkdownPlugin } from "@milkdown/ctx";
+import { Ctx, MilkdownPlugin } from "@milkdown/ctx";
 import {
   linkTooltipPlugin,
   configureLinkTooltip,
 } from "@milkdown/kit/component/link-tooltip";
 
-import { listItemBlockComponent } from "./view";
+import { CustomViewComponent } from "./view";
 import { linkInputRuleCustom } from "./inputRules/link";
 import { schema, tidalSchema } from "./config/schema";
 import {
@@ -28,10 +33,11 @@ import { customInputRulesKey } from "@milkdown/prose";
 import { commands, tidalCommands } from "./config/commands";
 import { keymap, tidalKeymap } from "./config/keymap";
 import { tidalPlugins, plugins } from "./config/plugins";
+import { Node } from "prosemirror-model";
 
 export function EmptyLinePrefix(content: string | null) {
   if (content == null) {
-    return null;
+    return "";
   }
 
   return content
@@ -66,7 +72,7 @@ export class TyporaEditor extends BasicEditor {
       .use(commonmark)
       .use(gfm)
       .use(history)
-      .use(listItemBlockComponent)
+      .use(CustomViewComponent)
       .use(linkInputRuleCustom)
 
       .config(configureLinkTooltip)
@@ -104,7 +110,7 @@ export class TidalEditor extends BasicEditor {
       .use(commonmark)
       .use(gfm)
       .use(history)
-      .use(listItemBlockComponent)
+      .use(CustomViewComponent)
       .use(linkInputRuleCustom)
 
       .config(configureLinkTooltip)
@@ -124,4 +130,62 @@ export class TidalEditor extends BasicEditor {
         });
       });
   }
+
+  docInit(doc: Node) {
+    var rebuild = false;
+    if (this.status != EditorStatus.Idle) {
+      rebuild = true;
+    }
+
+    this.config((ctx) => {
+      ctx.set(editorStateOptionsCtx, (x) => {
+        x.doc = doc;
+        return x;
+      });
+    });
+
+    if (rebuild) {
+      this.create();
+    }
+  }
+
+  toDoc(markdown: DefaultValue): Node {
+    const ctx = this.ctx;
+    const schema = ctx.get(schemaCtx);
+    const parser = ctx.get(parserCtx);
+    return getDoc(markdown, parser, schema);
+  }
+
+  titleNode(content: string, children: Node[]): Node {
+    const ctx = this.ctx;
+    const schema = ctx.get(schemaCtx);
+    return schema.node("heading", { level: 0, id: content }, children);
+  }
+
+  docNode(children: Node[]): Node {
+    const ctx = this.ctx;
+    const schema = ctx.get(schemaCtx);
+    return schema.node("doc", null, children);
+  }
+}
+
+export function loadContent(markdown: string, title?: string) {
+  return (ctx: Ctx): Node => {
+    const view = ctx.get(editorViewCtx);
+    const schema = ctx.get(schemaCtx);
+    const parser = ctx.get(parserCtx);
+    const doc = getDoc(markdown, parser, schema);
+    var children: Node[] = [];
+    doc.forEach((child) => {
+      children = [...children, child];
+    });
+
+    return schema.node(
+      "doc",
+      null,
+      title
+        ? [schema.node("alluvialDoc", { title: title }, children)]
+        : children
+    );
+  };
 }

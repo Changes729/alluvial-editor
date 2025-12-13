@@ -36,6 +36,7 @@ import {
 import { paragraphAttr, paragraphSchema } from "../node/paragraph";
 import { spanAttr, spanSchema } from "../node/span";
 import { tidalHeadingAttr, tidalHeadingSchema } from "../node/tidalHeading";
+import { alluvialDocAttr, alluvialDocSchema } from "../node/alluvialDoc";
 
 export const schema: MilkdownPlugin[] = [
   docSchema,
@@ -143,6 +144,9 @@ export const tidalSchema: MilkdownPlugin[] = [
 
   htmlAttr,
   htmlSchema,
+
+  alluvialDocAttr,
+  alluvialDocSchema,
 
   textSchema,
 ].flat();
