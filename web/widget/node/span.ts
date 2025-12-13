@@ -1,44 +1,55 @@
-import { $nodeAttr, $nodeSchema } from "@milkdown/utils";
+import { $markAttr, $markSchema } from "@milkdown/utils";
 
 import { withMeta } from "../../utils/meta";
 import { editorViewCtx } from "@milkdown/core";
 import { Ctx } from "@milkdown/ctx";
 import { remarkPreserveEmptyLinePlugin } from "@milkdown/preset-commonmark";
 import { serializeText } from "../../utils/serialize-text";
+import { strongSchema } from "./strong";
 
-export const spanAttr = $nodeAttr("span");
+export const spanAttr = $markAttr("span");
 
 withMeta(spanAttr, {
   displayName: "Attr<span>",
   group: "span",
 });
 
-export const spanSchema = $nodeSchema("span", (ctx) => ({
+export const spanSchema = $markSchema("span", (ctx) => ({
   inline: true,
-  content: "text*",
+  content: "inline*",
   group: "inline",
+  attrs: {
+    pair: { default: false, validate: Boolean },
+  },
   parseDOM: [{ tag: "span" }],
-  toDOM: (node) => {
-    console.log(node);
-    return ["span", ctx.get(spanAttr.key)(node), 0];
+  toDOM: (mark) => {
+    console.log(mark);
+    return ["span", ctx.get(spanAttr.key)(mark)];
   },
   parseMarkdown: {
-    match: () => false,
-    runner: () => {},
+    match: (node) => false,
+    runner: (state, node, type) => {
+      state.openMark(type, { pair: true });
+      state.addText("**");
+      state.closeMark(type);
+
+      state.openMark(strongSchema.type(ctx));
+      state.next(node.children);
+      state.closeMark(strongSchema.type(ctx));
+
+      state.openMark(type, { pair: true });
+      state.addText("**");
+      state.closeMark(type);
+    },
   },
   toMarkdown: {
     match: (node) => node.type.name === "span",
-    runner: (state, node) => {
-      const view = ctx.get(editorViewCtx);
-      const lastNode = view.state?.doc.lastChild;
-      if (
-        (!node.content || node.content.size === 0) &&
-        node !== lastNode &&
-        shouldPreserveEmptyLine(ctx)
-      ) {
-        state.addNode("text", undefined, "\n");
-      } else {
-        serializeText(state, node);
+    runner: (state, mark) => {
+      if (!mark.attrs.pair) {
+        state.withMark(mark, "span", undefined, {
+          hidden: true,
+        });
+        // state.next(mark.content);
       }
     },
   },
@@ -55,7 +66,7 @@ function shouldPreserveEmptyLine(ctx: Ctx) {
   return shouldPreserveEmptyLine;
 }
 
-withMeta(spanSchema.node, {
+withMeta(spanSchema.mark, {
   displayName: "NodeSchema<span>",
   group: "Text",
 });

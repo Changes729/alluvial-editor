@@ -44,7 +44,7 @@ export function markRule(
 
       const attrs = options.getAttr?.(match);
 
-      tr.addMark(start, textStart, spanSchema.type(ctx).create());
+      tr.addMark(start, textStart, spanSchema.type(ctx).create({ pair: true }));
 
       if (textEnd < end) {
         tr.delete(textEnd, end);
@@ -52,7 +52,7 @@ export function markRule(
         tr.addMark(
           textEnd,
           textEnd + "**".length,
-          spanSchema.type(ctx).create()
+          spanSchema.type(ctx).create({ pair: true })
         );
       }
 
