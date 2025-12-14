@@ -3,6 +3,7 @@ import {
   Editor,
   editorStateOptionsCtx,
   EditorStatus,
+  editorViewOptionsCtx,
   inputRulesCtx,
 } from "@milkdown/kit/core";
 import { history } from "@milkdown/kit/plugin/history";
@@ -23,7 +24,7 @@ import {
   tidalInputRules,
 } from "./config/markInputRules";
 import { customInputRulesRun } from "../utils/custom-input-rules";
-import { Plugin } from "@milkdown/prose/state";
+import { EditorState, Plugin } from "@milkdown/prose/state";
 import { customInputRulesKey } from "@milkdown/prose";
 import { commands, tidalCommands } from "./config/commands";
 import { keymap, tidalKeymap } from "./config/keymap";
@@ -40,10 +41,15 @@ export function EmptyLinePrefix(content: string | null) {
 }
 
 class BasicEditor extends Editor {
+  public editable?: (state: EditorState) => boolean;
+
   UpdateEditorContent(newContent: string | null) {
     if (newContent != null) {
       this.config((ctx) => {
         ctx.set(defaultValueCtx, newContent);
+        ctx.set(editorViewOptionsCtx, {
+          editable: this.editable,
+        });
       });
       if (this.status != EditorStatus.Idle) this.create();
     }
