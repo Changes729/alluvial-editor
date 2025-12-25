@@ -86,7 +86,7 @@ withMeta(tidalHeadingSchema.ctx, {
 /// You can input numbers of `#` and a `space` to create tidalHeading.
 export const wrapInTidalHeadingInputRule = $inputRule((ctx) => {
   return textblockTypeInputRule(
-    /^(?<hashes>#+)\s$/,
+    /^(?<hashes>##+)\s$/,
     tidalHeadingSchema.type(ctx),
     (match) => {
       const x = match.groups?.hashes?.length || 0;

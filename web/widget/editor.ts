@@ -29,6 +29,7 @@ import { customInputRulesKey } from "@milkdown/prose";
 import { commands, tidalCommands } from "./config/commands";
 import { keymap, tidalKeymap } from "./config/keymap";
 import { tidalPlugins, plugins } from "./config/plugins";
+import { tidalDateView } from "./view/tidalDate";
 
 export function EmptyLinePrefix(content: string | null) {
   if (content == null) {
@@ -111,6 +112,7 @@ export class TidalEditor extends BasicEditor {
       .use(gfm)
       .use(history)
       .use(listItemBlockComponent)
+      .use(tidalDateView)
       .use(linkInputRuleCustom)
 
       .config(configureLinkTooltip)

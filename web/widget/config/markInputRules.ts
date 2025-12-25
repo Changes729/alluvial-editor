@@ -13,6 +13,7 @@ import {
   wrapInOrderedListInputRule,
 } from "@milkdown/kit/preset/commonmark";
 import { wrapInTidalHeadingInputRule } from "../node/tidalHeading";
+import { wrapInTidalDatetimeInputRule } from "../node/tidalDatetime";
 
 export const inputRules: MilkdownPlugin[] = [
   wrapInBlockquoteInputRule,
@@ -38,5 +39,6 @@ export const tidalInputRules: MilkdownPlugin[] = [
   createCodeBlockInputRule,
   insertHrInputRule,
   wrapInTidalHeadingInputRule,
+  wrapInTidalDatetimeInputRule,
   insertImageInputRule,
 ].flat();
