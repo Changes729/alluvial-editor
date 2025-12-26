@@ -4,7 +4,7 @@ import http from "node:http";
 import { sassPlugin, postcssModules } from "esbuild-sass-plugin";
 import autoprefixer from "autoprefixer";
 
-let PORT = 3000;
+let PORT = 3002;
 const APP_DIR = "web/";
 const HTML_DIR = "public/html/";
 const CSS_DIR = "public/css/";
@@ -45,7 +45,7 @@ let ctx = await esbuild.context({
     sassPlugin({
       filter: /\.module\.scss$/,
       transform: postcssModules({
-        generateScopedName: "[local]"
+        generateScopedName: "[local]",
         // plugins: [autoprefixer],
       }),
     }),
@@ -56,15 +56,17 @@ let ctx = await esbuild.context({
   conditions: ["production"],
 });
 
-let { host, port } = await ctx.serve({
+let { hosts, port } = await ctx.serve({
   servedir: OUT_DIR,
+  port: 0,
 });
+console.log(`[serve] listening at http://${hosts[0]}:${port}`);
 
 http
   .createServer((req, res) => {
     const options = {
       hostname: host,
-      port: port,
+      port: 0,
       path: req.url,
       method: req.method,
       headers: req.headers,
@@ -97,7 +99,6 @@ http
 
     req.pipe(proxyReq, { end: true });
   })
-  .listen(PORT);
+  .listen();
 
 await ctx.watch();
-console.log(`[serve] listening at http://${host}:${PORT}`);
