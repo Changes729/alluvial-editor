@@ -7,8 +7,8 @@ import { withMeta } from "../../utils/meta";
 import { serializeText } from "../../utils/serialize-text";
 import { headingIdGenerator } from "@milkdown/preset-commonmark";
 
-const tidalHeadingIndex = Array(6)
-  .fill(0)
+const tidalHeadingIndex = Array(5)
+  .fill(1)
   .map((_, i) => i + 1);
 
 /// HTML attributes for tidalHeading node.
@@ -86,7 +86,7 @@ withMeta(tidalHeadingSchema.ctx, {
 /// You can input numbers of `#` and a `space` to create tidalHeading.
 export const wrapInTidalHeadingInputRule = $inputRule((ctx) => {
   return textblockTypeInputRule(
-    /^(?<hashes>##+)\s$/,
+    /^#(?<hashes>#+)\s$/,
     tidalHeadingSchema.type(ctx),
     (match) => {
       const x = match.groups?.hashes?.length || 0;

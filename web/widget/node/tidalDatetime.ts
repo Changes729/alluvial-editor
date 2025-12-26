@@ -22,8 +22,7 @@ withMeta(tidalDatetimeAttr, {
 export const tidalDatetimeSchema = $nodeSchema("tidalDatetime", (ctx) => {
   const getId = ctx.get(headingIdGenerator.key);
   return {
-    inline: true,
-    group: "inline",
+    group: "block",
     selectable: true,
     draggable: false,
     marks: "",
@@ -33,7 +32,14 @@ export const tidalDatetimeSchema = $nodeSchema("tidalDatetime", (ctx) => {
     attrs: {
       date: {},
     },
-    parseDOM: [{ tag: "h1" }],
+    parseDOM: [
+      {
+        tag: "h1",
+        // getAttrs: (node) => {
+        //   return { date: new Date(node.innerText) };
+        // },
+      },
+    ],
     toDOM: (node) => {
       return [`h1`, { ...ctx.get(tidalDatetimeAttr.key)(node) }, 0];
     },
@@ -42,7 +48,7 @@ export const tidalDatetimeSchema = $nodeSchema("tidalDatetime", (ctx) => {
       runner: (state, node, type) => {},
     },
     toMarkdown: {
-      match: (node) => false,
+      match: (node) => node.type.name === "tidalDatetime",
       runner: (state, node) => {
         state.next(node.content);
       },
