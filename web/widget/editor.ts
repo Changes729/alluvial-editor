@@ -102,7 +102,7 @@ export class TyporaEditor extends BasicEditor {
   }
 }
 
-type TidalData = {
+export type TidalData = {
   date?: Date;
   str: string;
 };
