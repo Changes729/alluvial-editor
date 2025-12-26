@@ -1,9 +1,6 @@
-import React, { Component, useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
 
-import { loadContent, saveContent, toFile } from "./utils/content-loader";
 import { BasicEditorView, TidalEditor } from "./module.index";
-import { useParams } from "react-router";
-import { getMarkdown } from "@milkdown/utils";
 
 function fileName(base64file: string) {
   const file = decodeURI(base64file);
@@ -13,52 +10,18 @@ function fileName(base64file: string) {
 
 export const AlluvialTidal: React.FC<{}> = ({}) => {
   var contentList = useRef<string[]>([]);
-  const params = useParams();
-  const [editorState, setEditorState] = useState<TidalEditor[]>([]);
+  const editor = useRef<TidalEditor>(TidalEditor.make());
 
   function saveFile() {
-    console.log("save file");
-    contentList.current.forEach((f, i) => {
-      saveContent(
-        "/",
-        toFile(f + ".md", editorState[i].action(getMarkdown()), "text/markdown")
-      );
-    });
+    console.log(editor.current.tidalData());
   }
 
   useEffect(() => {
-    const url = "/";
-    setEditorState([]);
-
-    loadContent(url)
-      .then(({ contentType, content }) => {
-        if (!contentType || !contentType.includes("text/directory")) {
-          console.log(contentType, content);
-          console.log("error");
-        } else {
-          (content as string[]).forEach((tagName) => {
-            const isFolder = tagName.endsWith("/");
-
-            if (!isFolder) {
-              const editor = TidalEditor.make();
-              setEditorState((state) => [...state, editor]);
-              contentList.current.push(fileName(tagName));
-
-              loadContent(url + tagName).then(({ contentType, content }) => {
-                editor.UpdateEditorContent(content as string);
-              });
-            }
-          });
-        }
-      })
-      .finally(() => {
-        const fileName = "TestAlluvial";
-        if (!contentList.current.includes(fileName)) {
-          const editor = TidalEditor.make();
-          contentList.current = [fileName, ...contentList.current];
-          setEditorState((state) => [editor, ...state]);
-        }
-      });
+    editor.current.initTidal([
+      { str: "test" },
+      { date: new Date(2025, 11, 1), str: "# Hello world" },
+      { date: new Date(2025, 11, 0), str: "# Hello world 2" },
+    ]);
   }, []);
 
   function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
@@ -72,12 +35,7 @@ export const AlluvialTidal: React.FC<{}> = ({}) => {
 
   return (
     <div className="abstract-content-part" onKeyDown={onKeyDown}>
-      {editorState.map((editor, i) => (
-        <>
-          <h1 className="milkdown">{contentList.current[i]}</h1>
-          <BasicEditorView editor={editor}></BasicEditorView>
-        </>
-      ))}
+      <BasicEditorView editor={editor.current}></BasicEditorView>
     </div>
   );
 };

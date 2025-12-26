@@ -3,8 +3,12 @@ import {
   Editor,
   editorStateOptionsCtx,
   EditorStatus,
+  editorViewCtx,
   editorViewOptionsCtx,
   inputRulesCtx,
+  parserCtx,
+  schemaCtx,
+  serializerCtx,
 } from "@milkdown/kit/core";
 import { history } from "@milkdown/kit/plugin/history";
 import { nord } from "@milkdown/theme-nord";
@@ -30,6 +34,9 @@ import { commands, tidalCommands } from "./config/commands";
 import { keymap, tidalKeymap } from "./config/keymap";
 import { tidalPlugins, plugins } from "./config/plugins";
 import { tidalDateView } from "./view/tidalDate";
+import { tidalDatetimeSchema } from "./node/tidalDatetime";
+import { Node as PmNode, Slice } from "prosemirror-model";
+import { waitUntil } from "../utils/utils";
 
 export function EmptyLinePrefix(content: string | null) {
   if (content == null) {
@@ -95,6 +102,11 @@ export class TyporaEditor extends BasicEditor {
   }
 }
 
+type TidalData = {
+  date?: Date;
+  str: string;
+};
+
 export class TidalEditor extends BasicEditor {
   static make() {
     const commonmark: MilkdownPlugin[] = [
@@ -131,5 +143,83 @@ export class TidalEditor extends BasicEditor {
           return x;
         });
       });
+  }
+
+  async initTidal(data: TidalData[]) {
+    await waitUntil(() => this.status != EditorStatus.OnCreate);
+    this.action((ctx) => {
+      const view = ctx.get(editorViewCtx);
+      const schema = ctx.get(schemaCtx);
+      const parser = ctx.get(parserCtx);
+      var content: PmNode[] = [];
+
+      data.forEach((value) => {
+        const doc = parser(value.str);
+        if (value.date) {
+          content.push(
+            tidalDatetimeSchema.type(ctx).create({ date: value.date })
+          );
+        }
+        for (let i = 0; i < doc.content.content.length; i++) {
+          content.push(doc.child(i));
+        }
+      });
+      const doc = schema.node("doc", null, content);
+
+      const { state } = view;
+      return view.dispatch(
+        state.tr.replace(
+          0,
+          state.doc.content.size,
+          new Slice(doc.content, 0, 0)
+        )
+      );
+    });
+  }
+
+  tidalData(): TidalData[] {
+    return this.action((ctx) => {
+      let data: TidalData[] = [];
+      const schema = ctx.get(schemaCtx);
+      const view = ctx.get(editorViewCtx);
+      const serializer = ctx.get(serializerCtx);
+      const state = view.state;
+      const doc = state.doc;
+      const dates = view.dom.getElementsByTagName("h1");
+      let curr_pos = 0;
+      for (let i = 0; i < dates.length; ++i) {
+        const pos = view.posAtDOM(dates[i], 0);
+        const n = doc.nodeAt(curr_pos);
+        if (pos != curr_pos) {
+          let slice = state.doc.slice(curr_pos, pos, true);
+          let doc = schema.topNodeType.createAndFill(null, slice.content);
+          if (doc) {
+            const str = serializer(doc);
+            if (n?.type.name == tidalDatetimeSchema.type(ctx).name) {
+              data.push({ date: n.attrs.date, str });
+            } else {
+              data.push({ str });
+            }
+            curr_pos = pos;
+          }
+        }
+      }
+
+      const n = doc.nodeAt(curr_pos);
+      if (curr_pos != 0) {
+        let slice = state.doc.slice(curr_pos);
+        let doc = schema.topNodeType.createAndFill(null, slice.content);
+        if (doc) {
+          const str = serializer(doc);
+          if (n?.type.name == tidalDatetimeSchema.type(ctx).name) {
+            data.push({ date: n.attrs.date, str });
+          } else {
+            data.push({ str });
+          }
+        }
+      }
+
+      return data;
+    });
   }
 }
