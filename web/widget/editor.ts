@@ -28,7 +28,7 @@ import {
   tidalInputRules,
 } from "./config/markInputRules";
 import { customInputRulesRun } from "../utils/custom-input-rules";
-import { EditorState, Plugin } from "@milkdown/prose/state";
+import { EditorState, Plugin, TextSelection } from "@milkdown/prose/state";
 import { customInputRulesKey } from "@milkdown/prose";
 import { commands, tidalCommands } from "./config/commands";
 import { keymap, tidalKeymap } from "./config/keymap";
@@ -37,6 +37,7 @@ import { tidalDateView } from "./view/tidalDate";
 import { tidalDatetimeSchema } from "./node/tidalDatetime";
 import { Node as PmNode, Slice } from "prosemirror-model";
 import { waitUntil } from "../utils/utils";
+import { paragraphSchema } from "./node/paragraph";
 
 export function EmptyLinePrefix(content: string | null) {
   if (content == null) {
@@ -137,6 +138,32 @@ export class TidalEditor extends BasicEditor {
             if (plugin.spec.key == customInputRulesKey) {
               plugin.props.handleTextInput = (view, from, to, text) => {
                 return customInputRulesRun(view, from, to, text, rules, plugin);
+              };
+              plugin.props.handleKeyDown = (view, event) => {
+                if (event.key == "ArrowDown" || event.key == "ArrowLeft") {
+                  const { $anchor } = view.state.selection as TextSelection;
+                  if ($anchor.pos == 0 && $anchor.depth == 0) {
+                    view.dispatch(
+                      view.state.tr.insert(
+                        0,
+                        paragraphSchema.type(ctx).create()
+                      )
+                    );
+                  }
+                }
+
+                if (event.key !== "Enter") return false;
+                const { $cursor } = view.state.selection as TextSelection;
+                if ($cursor)
+                  return customInputRulesRun(
+                    view,
+                    $cursor.pos,
+                    $cursor.pos,
+                    "\n",
+                    rules,
+                    plugin
+                  );
+                return false;
               };
             }
           });
