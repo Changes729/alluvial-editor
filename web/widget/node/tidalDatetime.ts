@@ -75,16 +75,13 @@ export const wrapInTidalDatetimeInputRule = $inputRule(
       (state, match, start, end) => {
         const [matched, year, month, day] = match;
         if (matched) {
-          return state.tr
-            .replaceWith(
-              start,
-              end,
-              tidalDatetimeSchema.type(ctx).create({
-                date: new Date(Number(year), Number(month) - 1, Number(day)),
-              })
-            )
-            .split(start + 1)
-            .scrollIntoView();
+          return state.tr.replaceWith(
+            start,
+            end,
+            tidalDatetimeSchema.type(ctx).create({
+              date: new Date(Number(year), Number(month) - 1, Number(day)),
+            })
+          );
         }
 
         return null;
