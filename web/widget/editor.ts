@@ -63,6 +63,10 @@ class BasicEditor extends Editor {
       if (this.status != EditorStatus.Idle) this.create();
     }
   }
+
+  CouldUpdate() {
+    return this.status != EditorStatus.OnCreate;
+  }
 }
 
 export class TyporaEditor extends BasicEditor {
