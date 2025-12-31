@@ -233,7 +233,7 @@ export class TidalEditor extends BasicEditor {
       }
 
       const n = doc.nodeAt(curr_pos);
-      if (curr_pos != 0) {
+      {
         let slice = state.doc.slice(curr_pos);
         let doc = schema.topNodeType.createAndFill(null, slice.content);
         if (doc) {
