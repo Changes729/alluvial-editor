@@ -29,7 +29,7 @@ export const listItemBlockView = $view(
       };
 
       const dom = document.createElement("li");
-      dom.className = "list-item";
+      dom.classList.add("list-item", "milkdown-list-item-block");
       let checkbox: HTMLInputElement | null = null;
 
       const contentDOM = document.createElement("div");
@@ -101,7 +101,7 @@ export const listItemBlockView = $view(
         },
       };
     };
-  }
+  },
 );
 
 withMeta(listItemBlockView, {

@@ -12,7 +12,7 @@ import {
 } from "@milkdown/kit/core";
 import { history } from "@milkdown/kit/plugin/history";
 import { nord } from "@milkdown/theme-nord";
-import { gfm } from "@milkdown/kit/preset/gfm";
+import { gfm, remarkGFMPlugin } from "@milkdown/kit/preset/gfm";
 import { MilkdownPlugin } from "@milkdown/ctx";
 import {
   linkTooltipPlugin,
@@ -38,6 +38,34 @@ import { tidalDatetimeSchema } from "./node/tidalDatetime";
 import { Node as PmNode, Slice } from "prosemirror-model";
 import { waitUntil } from "../utils/utils";
 import { paragraphSchema } from "./node/paragraph";
+import { defaultsDeep } from "lodash-es";
+
+import "./crepe/theme/common/style.css";
+import "./crepe/theme/crepe/style.css";
+import {
+  codeMirror,
+  CodeMirrorFeatureConfig,
+  listItem,
+  linkTooltip,
+  imageBlock,
+  cursor,
+  blockEdit,
+  placeholder,
+  toolbar,
+  table,
+  latex,
+  LatexFeatureConfig,
+  BlockEditFeatureConfig,
+  ToolbarFeatureConfig,
+} from "./crepe/feature";
+import { languages } from "@codemirror/language-data";
+import {
+  chevronDownIcon,
+  clearIcon,
+  editIcon,
+  searchIcon,
+  visibilityOffIcon,
+} from "./crepe/icons";
 
 export function EmptyLinePrefix(content: string | null) {
   if (content == null) {
@@ -51,6 +79,14 @@ export function EmptyLinePrefix(content: string | null) {
 
 class BasicEditor extends Editor {
   public editable?: (state: EditorState) => boolean;
+
+  loadFeatures(
+    featureLoader: (editor: Editor, config?: Object) => void,
+    config?: Object,
+  ) {
+    featureLoader(this, config);
+    return this;
+  }
 
   UpdateEditorContent(newContent: string | null) {
     if (newContent != null) {
@@ -80,10 +116,12 @@ export class TyporaEditor extends BasicEditor {
       plugins,
     ].flat();
 
-    return new TyporaEditor()
+    let editor = new TyporaEditor()
       .config(nord)
       .use(commonmark)
       .use(gfm)
+      .use(remarkGFMPlugin)
+
       .use(history)
       .use(listItemBlockComponent)
       .use(linkInputRuleCustom)
@@ -104,6 +142,36 @@ export class TyporaEditor extends BasicEditor {
           return x;
         });
       });
+
+    editor
+      .loadFeatures(codeMirror, {
+        languages,
+        expandIcon: chevronDownIcon,
+        searchIcon: searchIcon,
+        clearSearchIcon: clearIcon,
+        searchPlaceholder: "Search language",
+        noResultText: "No result",
+        previewToggleIcon: (previewOnlyMode) =>
+          previewOnlyMode ? editIcon : visibilityOffIcon,
+      } as CodeMirrorFeatureConfig)
+      // .loadFeatures(listItem)
+      .loadFeatures(linkTooltip)
+      .loadFeatures(imageBlock)
+      // .loadFeatures(blockEdit, {
+      //   isLatexEnabled: true,
+      //   isImageBlockEnabled: true,
+      //   isTableEnabled: true,
+      // } as BlockEditFeatureConfig)
+      .loadFeatures(placeholder)
+      .loadFeatures(toolbar, {
+        isLatexEnabled: true,
+      } as ToolbarFeatureConfig)
+      .loadFeatures(table)
+      .loadFeatures(latex, {
+        codeMirrorEnabled: true,
+      } as LatexFeatureConfig);
+
+    return editor;
   }
 }
 
@@ -123,57 +191,93 @@ export class TidalEditor extends BasicEditor {
       tidalPlugins,
     ].flat();
 
-    return new TidalEditor()
-      .config(nord)
-      .use(commonmark)
-      .use(gfm)
-      .use(history)
-      .use(listItemBlockComponent)
-      .use(tidalDateView)
-      .use(linkInputRuleCustom)
+    return (
+      new TidalEditor()
+        .config(nord)
+        .use(commonmark)
+        .use(gfm)
+        .use(remarkGFMPlugin)
+        .use(history)
+        .use(listItemBlockComponent)
+        .use(tidalDateView)
+        .use(linkInputRuleCustom)
 
-      .config(configureLinkTooltip)
-      .use(linkTooltipPlugin)
+        .config(configureLinkTooltip)
+        .use(linkTooltipPlugin)
 
-      .config((ctx) => {
-        ctx.set(editorStateOptionsCtx, (x) => {
-          const rules = ctx.get(inputRulesCtx);
-          x.plugins?.forEach((plugin: Plugin) => {
-            if (plugin.spec.key == customInputRulesKey) {
-              plugin.props.handleTextInput = (view, from, to, text) => {
-                return customInputRulesRun(view, from, to, text, rules, plugin);
-              };
-              plugin.props.handleKeyDown = (view, event) => {
-                if (event.key == "ArrowDown" || event.key == "ArrowLeft") {
-                  const { $anchor } = view.state.selection as TextSelection;
-                  if ($anchor.pos == 0 && $anchor.depth == 0) {
-                    view.dispatch(
-                      view.state.tr.insert(
-                        0,
-                        paragraphSchema.type(ctx).create()
-                      )
-                    );
-                  }
-                }
-
-                if (event.key !== "Enter") return false;
-                const { $cursor } = view.state.selection as TextSelection;
-                if ($cursor)
+        .config((ctx) => {
+          ctx.set(editorStateOptionsCtx, (x) => {
+            const rules = ctx.get(inputRulesCtx);
+            x.plugins?.forEach((plugin: Plugin) => {
+              if (plugin.spec.key == customInputRulesKey) {
+                plugin.props.handleTextInput = (view, from, to, text) => {
                   return customInputRulesRun(
                     view,
-                    $cursor.pos,
-                    $cursor.pos,
-                    "\n",
+                    from,
+                    to,
+                    text,
                     rules,
-                    plugin
+                    plugin,
                   );
-                return false;
-              };
-            }
+                };
+                plugin.props.handleKeyDown = (view, event) => {
+                  if (event.key == "ArrowDown" || event.key == "ArrowLeft") {
+                    const { $anchor } = view.state.selection as TextSelection;
+                    if ($anchor.pos == 0 && $anchor.depth == 0) {
+                      view.dispatch(
+                        view.state.tr.insert(
+                          0,
+                          paragraphSchema.type(ctx).create(),
+                        ),
+                      );
+                    }
+                  }
+
+                  if (event.key !== "Enter") return false;
+                  const { $cursor } = view.state.selection as TextSelection;
+                  if ($cursor)
+                    return customInputRulesRun(
+                      view,
+                      $cursor.pos,
+                      $cursor.pos,
+                      "\n",
+                      rules,
+                      plugin,
+                    );
+                  return false;
+                };
+              }
+            });
+            return x;
           });
-          return x;
-        });
-      });
+        })
+        .loadFeatures(codeMirror, {
+          languages,
+          expandIcon: chevronDownIcon,
+          searchIcon: searchIcon,
+          clearSearchIcon: clearIcon,
+          searchPlaceholder: "Search language",
+          noResultText: "No result",
+          previewToggleIcon: (previewOnlyMode) =>
+            previewOnlyMode ? editIcon : visibilityOffIcon,
+        } as CodeMirrorFeatureConfig)
+        // .loadFeatures(listItem)
+        .loadFeatures(linkTooltip)
+        .loadFeatures(imageBlock)
+        // .loadFeatures(blockEdit, {
+        //   isLatexEnabled: true,
+        //   isImageBlockEnabled: true,
+        //   isTableEnabled: true,
+        // } as BlockEditFeatureConfig)
+        .loadFeatures(placeholder)
+        .loadFeatures(toolbar, {
+          isLatexEnabled: true,
+        } as ToolbarFeatureConfig)
+        .loadFeatures(table)
+        .loadFeatures(latex, {
+          codeMirrorEnabled: true,
+        } as LatexFeatureConfig)
+    );
   }
 
   async initTidal(data: TidalData[]) {
@@ -188,7 +292,7 @@ export class TidalEditor extends BasicEditor {
         const doc = parser(value.str);
         if (value.date) {
           content.push(
-            tidalDatetimeSchema.type(ctx).create({ date: value.date })
+            tidalDatetimeSchema.type(ctx).create({ date: value.date }),
           );
         }
         for (let i = 0; i < doc.content.content.length; i++) {
@@ -202,8 +306,8 @@ export class TidalEditor extends BasicEditor {
         state.tr.replace(
           0,
           state.doc.content.size,
-          new Slice(doc.content, 0, 0)
-        )
+          new Slice(doc.content, 0, 0),
+        ),
       );
     });
   }
