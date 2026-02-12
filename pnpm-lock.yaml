@@ -13,46 +13,22 @@ importers:
 
   .:
     dependencies:
-      '@codemirror/commands':
-        specifier: ^6.10.1
-        version: 6.10.1
-      '@codemirror/language-data':
-        specifier: ^6.5.2
-        version: 6.5.2
       '@floating-ui/dom':
         specifier: ^1.7.4
         version: 1.7.4
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
-      codemirror:
-        specifier: ^6.0.2
-        version: 6.0.2
-      dompurify:
-        specifier: ^3.3.1
-        version: 3.3.1
       github-markdown-css:
         specifier: ^5.8.1
         version: 5.8.1
-      katex:
-        specifier: ^0.16.27
-        version: 0.16.27
-      prosemirror-virtual-cursor:
-        specifier: ^0.4.2
-        version: 0.4.2(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.3(patch_hash=50dabb9895c00315655c8b58a7d11c2567abcc6a7e46b8aa0f77c22564a034fc))
-      remark-math:
-        specifier: ^6.0.0
-        version: 6.0.0
-      unist-util-visit:
-        specifier: ^5.0.0
-        version: 5.0.0
-      vue:
-        specifier: ^3.5.26
-        version: 3.5.26(typescript@5.9.3)
     devDependencies:
+      '@codemirror/commands':
+        specifier: ^6.10.1
+        version: 6.10.1
       '@codemirror/language':
         specifier: ^6.11.3
         version: 6.11.3
+      '@codemirror/language-data':
+        specifier: ^6.5.2
+        version: 6.5.2
       '@codemirror/state':
         specifier: ^6.5.2
         version: 6.5.2
@@ -83,6 +59,9 @@ importers:
       '@milkdown/utils':
         specifier: ^7.17.1
         version: 7.17.2
+      '@types/katex':
+        specifier: ^0.16.8
+        version: 0.16.8
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -95,12 +74,27 @@ importers:
       autoprefixer:
         specifier: ^10.4.22
         version: 10.4.22(postcss@8.5.6)
+      baseline-browser-mapping:
+        specifier: ^2.9.19
+        version: 2.9.19
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      codemirror:
+        specifier: ^6.0.2
+        version: 6.0.2
+      dompurify:
+        specifier: ^3.3.1
+        version: 3.3.1
       esbuild:
         specifier: ^0.27.0
         version: 0.27.0
       esbuild-sass-plugin:
         specifier: ^3.3.1
         version: 3.3.1(esbuild@0.27.0)(sass-embedded@1.93.3)
+      katex:
+        specifier: ^0.16.27
+        version: 0.16.27
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -122,6 +116,9 @@ importers:
       prosemirror-view:
         specifier: ^1.41.3
         version: 1.41.3(patch_hash=50dabb9895c00315655c8b58a7d11c2567abcc6a7e46b8aa0f77c22564a034fc)
+      prosemirror-virtual-cursor:
+        specifier: ^0.4.2
+        version: 0.4.2(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.3(patch_hash=50dabb9895c00315655c8b58a7d11c2567abcc6a7e46b8aa0f77c22564a034fc))
       react:
         specifier: ^19.2.1
         version: 19.2.1
@@ -131,6 +128,9 @@ importers:
       react-router:
         specifier: ^7.9.6
         version: 7.9.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      remark-math:
+        specifier: ^6.0.0
+        version: 6.0.0
       sass-embedded:
         specifier: ^1.93.3
         version: 1.93.3
@@ -140,6 +140,12 @@ importers:
       typescript-plugin-css-modules:
         specifier: ^5.2.0
         version: 5.2.0(typescript@5.9.3)
+      unist-util-visit:
+        specifier: ^5.0.0
+        version: 5.0.0
+      vue:
+        specifier: ^3.5.26
+        version: 3.5.26(typescript@5.9.3)
 
 packages:
 
@@ -716,8 +722,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.8.31:
-    resolution: {integrity: sha512-a28v2eWrrRWPpJSzxc+mKwm0ZtVx/G8SepdQZDArnXYU/XS+IF6mp8aB/4E+hH1tyGCoDo3KlUCdlSxGDsRkAw==}
+  baseline-browser-mapping@2.9.19:
+    resolution: {integrity: sha512-ipDqC8FrAl/76p2SSWKSI+H9tFwm7vYqXQrItCuiVPt26Km0jS+NzSsBWAaBusvSbQcfJG+JitdMm+wZAgTYqg==}
     hasBin: true
 
   brace-expansion@1.1.12:
@@ -2477,7 +2483,7 @@ snapshots:
   balanced-match@1.0.2:
     optional: true
 
-  baseline-browser-mapping@2.8.31: {}
+  baseline-browser-mapping@2.9.19: {}
 
   brace-expansion@1.1.12:
     dependencies:
@@ -2492,7 +2498,7 @@ snapshots:
 
   browserslist@4.28.0:
     dependencies:
-      baseline-browser-mapping: 2.8.31
+      baseline-browser-mapping: 2.9.19
       caniuse-lite: 1.0.30001757
       electron-to-chromium: 1.5.260
       node-releases: 2.0.27
