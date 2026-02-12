@@ -318,6 +318,10 @@
       .preview {
         text-align: center;
         overflow-x: auto;
+
+        span:empty:after {
+          content: '';
+        }
       }
     }
   }
