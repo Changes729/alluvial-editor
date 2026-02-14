@@ -66,6 +66,7 @@ import {
   searchIcon,
   visibilityOffIcon,
 } from "./crepe/icons";
+import { htmlBlock, HTMLBlockConfig } from "./codemirror-widget/html-block";
 
 export function EmptyLinePrefix(content: string | null) {
   if (content == null) {
@@ -169,7 +170,10 @@ export class TyporaEditor extends BasicEditor {
       .loadFeatures(table)
       .loadFeatures(latex, {
         codeMirrorEnabled: true,
-      } as LatexFeatureConfig);
+      } as LatexFeatureConfig)
+      .loadFeatures(htmlBlock, {
+        codeMirrorEnabled: true,
+      } as HTMLBlockConfig);
 
     return editor;
   }
@@ -277,6 +281,9 @@ export class TidalEditor extends BasicEditor {
         .loadFeatures(latex, {
           codeMirrorEnabled: true,
         } as LatexFeatureConfig)
+        .loadFeatures(htmlBlock, {
+          codeMirrorEnabled: true,
+        } as HTMLBlockConfig)
     );
   }
 
