@@ -12,12 +12,17 @@
 @import url(./markdown.scss) (resolution: 1dppx);
 @media (resolution: 1dppx) {
   .container {
-    width: 980px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
     min-height: 100%;
     margin-right: auto;
     margin-left: auto;
+    height: 100vh;
+    overflow: auto;
 
     .milkdown {
+      width: 980px;
       padding: 30px;
       font-size: 16px;
 
