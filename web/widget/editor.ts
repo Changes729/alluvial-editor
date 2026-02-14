@@ -162,7 +162,7 @@ export class TyporaEditor extends BasicEditor {
       //   isImageBlockEnabled: true,
       //   isTableEnabled: true,
       // } as BlockEditFeatureConfig)
-      .loadFeatures(placeholder)
+      // .loadFeatures(placeholder)
       .loadFeatures(toolbar, {
         isLatexEnabled: true,
       } as ToolbarFeatureConfig)
@@ -269,7 +269,7 @@ export class TidalEditor extends BasicEditor {
         //   isImageBlockEnabled: true,
         //   isTableEnabled: true,
         // } as BlockEditFeatureConfig)
-        .loadFeatures(placeholder)
+        // .loadFeatures(placeholder)
         .loadFeatures(toolbar, {
           isLatexEnabled: true,
         } as ToolbarFeatureConfig)
